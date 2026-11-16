@@ -1,14 +1,16 @@
 % Calculate Running Mean Function
-function sig_avg = calculate_mean(data, alpha)
+function sig_avg = EMA_Running_Mean(data, alpha)
     %{
-        Description: Calculating the EMA-based running mean
+        Description: Calculating the EMA-based running mean.
+
+        Equation: u(t) = a * x(t) + (1-a) * u(t-1)
+
         Inputs:
             data - The 1D data vector
             alpha - The fixed alpha constant
         Output:
             sig_avg - The 1D calculated mean vector
 
-        Equation: u(t) = a * x(t) + (1-a) * u(t-1)
     %}
     
     % Variables declaration

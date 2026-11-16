@@ -1,16 +1,19 @@
 % Calculate Running Variance Function
-function sig_var = calculate_variance(data, alpha)
+function sig_var = EMA_Running_Variance(data, alpha)
     %{
         Description: Calculating the EMA-based running variance
-        Inputs:
-            data - The 1D data vector
-            alpha - The fixed alpha constant
-        Output:
-            sig_avg - The 1D calculated variance vector
 
         Equations:
             u(t) = a * x(t) + (1-a) * u(t-1)
             v(t) = a * (x(t) - u(t))^2 + (1-a) * v(t-1)
+
+        Inputs:
+            data - The 1D data vector
+            alpha - The fixed alpha constant
+
+        Output:
+            sig_avg - The 1D calculated variance vector
+
     %}
 
     % Variables declaration

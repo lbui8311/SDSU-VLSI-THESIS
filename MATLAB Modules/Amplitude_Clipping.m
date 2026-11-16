@@ -1,40 +1,33 @@
 % Amplitude Clipping Module
-function [channel_status, flag_list] = amplitude_clip(data)
+function capped_signal = Amplitude_Clipping(data, max_amp)
     %{
-        Description: Keep track of all flagged data point's amplitudes
+        Description: Take in the filtered signal and set all data points that 
+        exceeded plausible voltage range to maximum amplitude.
+
         Inputs:
             data - The 1D data vector
-        Output:
-            channel_status - The channel conditional status
-            flag_list - A list of all data points that got flagged
+            max_amp - The maximum amplitude or out of range limit
+            
+        Output:            
+            capped_signal - The newly capped to max amplitude signal
     %}
 
     W = 10; % Num of data points in a sliding window
-    flag_idx = 0; % Flag index of exceeded amplitude
-    flag_list = []; % Keep track of all flagged indices
-    flag_limit = 100; % Num of permitted flagged indices
-    max_amp = 100 * 10^(-6); % Maximum Amplitude point
-    channel_status = 'Unchecked!';
+    [num_channels, num_samples] = size(data); 
+    capped_signal = zeros(num_channels, num_samples);
     
-    for i = 1:length(data)
+    for i = 1:num_samples
         % Create a trailing window
         begin_index = max(1, i - W + 1); % max(1,...) for edge cases if negative
         end_index = i; % if i = 20, begin_index = 11, end_index = 20
         window = data(1,begin_index:end_index); % Grab current window
 
         % Finding peak amplitude(s) of current window
-        for j = 1:length(window)
-           if window(j) > max_amp
-               flag_idx = i;
-               flag_list = [flag_list, flag_idx];
-           end
+        if max(abs(window)) > max_amp
+            capped_signal(1,i) = sign(data(i)) * max_amp;
+        else 
+            capped_signal(1,i) = data(i);
         end
     end
     
-    % Final Channel Verdict
-    if length(flag_list) > flag_limit
-        channel_status = 'Unreliable!';
-    else
-        channel_status = 'Reliable!';
-    end
 end
